@@ -1,0 +1,222 @@
+# Demo world for the browser walkthrough (§11): nine US facilities, mixed
+# capabilities (cold chain, hazmat), stocked zones, demand rates, a queue of
+# planned shipments across all three verticals, and one upcoming capacity cut.
+#
+#   nodal world load worlds/demo.yaml --db var/demo.sqlite3
+#   python -m server --db var/demo.sqlite3
+#   cd web && npm install && npm run dev     ->  http://localhost:5173
+start: 2026-09-01T00:00:00+00:00
+
+facilities:
+  - id: CHI
+    name: Chicago Gateway
+    lat: 41.88
+    lon: -87.63
+    tags: [cross-dock, "equip:forklift", "security:fenced"]
+    equipment: { "equip:forklift": 4 }
+    certifications:
+      - { tag: "cert:coldchain", valid_until: 2027-06-01T00:00:00+00:00 }
+    zones:
+      - { id: CHI-R1, kind: rack, capacity: { slots: 140, weight_kg: 260000 } }
+      - { id: CHI-C1, kind: cold, capacity: { slots: 48 }, temp_c: [-25, 4] }
+  - id: MEM
+    name: Memphis Hub
+    lat: 35.15
+    lon: -90.05
+    tags: [cross-dock, "equip:forklift"]
+    equipment: { "equip:forklift": 3 }
+    certifications:
+      - { tag: "cert:hazmat", valid_until: 2027-06-01T00:00:00+00:00 }
+    zones:
+      - { id: MEM-R1, kind: rack, capacity: { slots: 160 } }
+      - { id: MEM-B1, kind: bulk, capacity: { volume_m3: 700, weight_kg: 500000 } }
+  - id: ATL
+    name: Atlanta South
+    lat: 33.75
+    lon: -84.39
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 2 }
+    zones:
+      - { id: ATL-R1, kind: rack, capacity: { slots: 120 } }
+      - { id: ATL-Y1, kind: yard, capacity: { slots: 200 } }
+  - id: DFW
+    name: Dallas Fort Worth
+    lat: 32.78
+    lon: -96.8
+    tags: [cross-dock, "equip:forklift", "security:fenced"]
+    equipment: { "equip:forklift": 4 }
+    certifications:
+      - { tag: "cert:hazmat", valid_until: 2027-06-01T00:00:00+00:00 }
+      - { tag: "cert:coldchain", valid_until: 2027-06-01T00:00:00+00:00 }
+    zones:
+      - { id: DFW-R1, kind: rack, capacity: { slots: 180 } }
+      - { id: DFW-C1, kind: cold, capacity: { slots: 40 }, temp_c: [-25, 5] }
+  - id: DEN
+    name: Denver Ridge
+    lat: 39.74
+    lon: -104.99
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 2 }
+    zones:
+      - { id: DEN-R1, kind: rack, capacity: { slots: 110 } }
+  - id: EWR
+    name: Newark Bay
+    lat: 40.73
+    lon: -74.17
+    tags: [cross-dock, "equip:forklift", "security:fenced"]
+    equipment: { "equip:forklift": 5 }
+    certifications:
+      - { tag: "cert:coldchain", valid_until: 2027-06-01T00:00:00+00:00 }
+    zones:
+      - { id: EWR-R1, kind: rack, capacity: { slots: 150, weight_kg: 280000 } }
+      - { id: EWR-C1, kind: cold, capacity: { slots: 36 }, temp_c: [-25, 4] }
+  - id: HOU
+    name: Port Houston
+    lat: 29.76
+    lon: -95.37
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 3 }
+    certifications:
+      - { tag: "cert:hazmat", valid_until: 2027-06-01T00:00:00+00:00 }
+    zones:
+      - { id: HOU-R1, kind: rack, capacity: { slots: 130 } }
+      - { id: HOU-B1, kind: bulk, capacity: { volume_m3: 900, weight_kg: 700000 } }
+  - id: MKC
+    name: Kansas City Mid
+    lat: 39.1
+    lon: -94.58
+    tags: [cross-dock, "equip:forklift"]
+    equipment: { "equip:forklift": 3 }
+    zones:
+      - { id: MKC-R1, kind: rack, capacity: { slots: 120 } }
+  - id: CMH
+    name: Columbus East
+    lat: 39.96
+    lon: -83.0
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 2 }
+    zones:
+      - { id: CMH-R1, kind: rack, capacity: { slots: 100 } }
+
+lanes:
+  - { id: L-CHI-MKC, from: CHI, to: MKC, km: 810, minutes: 700, cost_fixed: 540 }
+  - { id: L-MKC-CHI, from: MKC, to: CHI, km: 810, minutes: 700, cost_fixed: 540 }
+  - { id: L-CHI-CMH, from: CHI, to: CMH, km: 570, minutes: 500, cost_fixed: 420 }
+  - { id: L-CMH-CHI, from: CMH, to: CHI, km: 570, minutes: 500, cost_fixed: 420 }
+  - { id: L-CHI-MEM, from: CHI, to: MEM, km: 860, minutes: 760, cost_fixed: 560 }
+  - { id: L-MEM-CHI, from: MEM, to: CHI, km: 860, minutes: 760, cost_fixed: 560 }
+  - { id: L-MEM-ATL, from: MEM, to: ATL, km: 620, minutes: 540, cost_fixed: 460 }
+  - { id: L-ATL-MEM, from: ATL, to: MEM, km: 620, minutes: 540, cost_fixed: 460 }
+  - { id: L-MEM-DFW, from: MEM, to: DFW, km: 730, minutes: 640, cost_fixed: 500 }
+  - { id: L-DFW-MEM, from: DFW, to: MEM, km: 730, minutes: 640, cost_fixed: 500 }
+  - { id: L-DFW-HOU, from: DFW, to: HOU, km: 385, minutes: 340, cost_fixed: 330 }
+  - { id: L-HOU-DFW, from: HOU, to: DFW, km: 385, minutes: 340, cost_fixed: 330 }
+  - { id: L-DFW-DEN, from: DFW, to: DEN, km: 1070, minutes: 940, cost_fixed: 700 }
+  - { id: L-DEN-DFW, from: DEN, to: DFW, km: 1070, minutes: 940, cost_fixed: 700 }
+  - { id: L-MKC-DEN, from: MKC, to: DEN, km: 970, minutes: 850, cost_fixed: 640 }
+  - { id: L-DEN-MKC, from: DEN, to: MKC, km: 970, minutes: 850, cost_fixed: 640 }
+  - { id: L-CMH-EWR, from: CMH, to: EWR, km: 850, minutes: 740, cost_fixed: 560 }
+  - { id: L-EWR-CMH, from: EWR, to: CMH, km: 850, minutes: 740, cost_fixed: 560 }
+  - { id: L-MKC-MEM, from: MKC, to: MEM, km: 720, minutes: 630, cost_fixed: 490 }
+  - { id: L-MEM-MKC, from: MEM, to: MKC, km: 720, minutes: 630, cost_fixed: 490 }
+
+demand_rates:
+  - { facility: CHI, group: general, per_day: 10 }
+  - { facility: MEM, group: general, per_day: 8 }
+  - { facility: ATL, group: general, per_day: 6 }
+  - { facility: DFW, group: perishable, per_day: 4 }
+  - { facility: EWR, group: perishable, per_day: 5 }
+
+lots:
+  - { id: LOT-CHI-1, zone: CHI-R1, group: general, quantity: 60, size: { slots: 30 } }
+  - { id: LOT-CHI-2, zone: CHI-C1, group: perishable, quantity: 20, size: { slots: 12 }, compat_class: food }
+  - { id: LOT-MEM-1, zone: MEM-R1, group: general, quantity: 80, size: { slots: 40 } }
+  - { id: LOT-DFW-1, zone: DFW-C1, group: perishable, quantity: 16, size: { slots: 10 }, compat_class: food }
+  - { id: LOT-HOU-1, zone: HOU-R1, group: general, quantity: 30, size: { slots: 18 }, compat_class: corrosive-acid }
+  - { id: LOT-EWR-1, zone: EWR-R1, group: general, quantity: 44, size: { slots: 22 } }
+
+shipments:
+  - id: SHP-2214
+    origin_label: "Port Houston Gate 4"
+    origin_lat: 29.7
+    origin_lon: -95.3
+    ready: 2026-09-01T09:00:00+00:00
+    deadline: 2026-09-04T00:00:00+00:00
+    lines:
+      - { sku: TURBINE-CASE, group: general, quantity: 24, size: { slots: 24, weight_kg: 9600 } }
+    requirements:
+      required_tags: ["equip:forklift"]
+      dwell_days: 4
+  - id: SHP-2215
+    origin: CHI
+    ready: 2026-09-01T10:00:00+00:00
+    deadline: 2026-09-05T00:00:00+00:00
+    lines:
+      - { sku: BERRIES, group: perishable, quantity: 14, size: { slots: 14 }, compat_class: food }
+    requirements:
+      temp_c: [-5, 4]
+      dwell_days: 2
+  - id: SHP-2216
+    origin_label: "Gulf Chemical Works"
+    origin_lat: 29.9
+    origin_lon: -93.9
+    ready: 2026-09-01T12:00:00+00:00
+    lines:
+      - { sku: HCL-DRUMS, group: general, quantity: 16, size: { slots: 16, weight_kg: 12800 }, compat_class: corrosive-base }
+    requirements:
+      compat_class: corrosive-base
+      dwell_days: 6
+  - id: SHP-2217
+    origin: EWR
+    ready: 2026-09-01T14:00:00+00:00
+    deadline: 2026-09-06T00:00:00+00:00
+    lines:
+      - { sku: FROZEN-SEAFOOD, group: perishable, quantity: 12, size: { slots: 12 }, compat_class: food }
+    requirements:
+      temp_c: [-25, -18]
+      dwell_days: 3
+  - id: SHP-2218
+    origin_label: "Denver Assembly"
+    origin_lat: 39.9
+    origin_lon: -105.1
+    ready: 2026-09-02T08:00:00+00:00
+    deadline: 2026-09-07T00:00:00+00:00
+    lines:
+      - { sku: SERVO-PALLETS, group: general, quantity: 20, size: { slots: 20, weight_kg: 7000 } }
+    requirements:
+      required_tags: ["equip:forklift", "security:fenced"]
+      dwell_days: 5
+  - id: SHP-2219
+    origin: MEM
+    ready: 2026-09-02T09:00:00+00:00
+    lines:
+      - { sku: OXIDIZER-TOTES, group: general, quantity: 10, size: { slots: 10 }, compat_class: oxidizer }
+    requirements:
+      compat_class: oxidizer
+      dwell_days: 4
+  - id: SHP-2220
+    origin_label: "Columbus Vendor Dock"
+    origin_lat: 40.1
+    origin_lon: -82.9
+    ready: 2026-09-02T11:00:00+00:00
+    deadline: 2026-09-06T12:00:00+00:00
+    lines:
+      - { sku: RETAIL-MIX, group: general, quantity: 26, size: { slots: 26, weight_kg: 5200 } }
+    requirements:
+      required_tags: ["equip:forklift"]
+      dwell_days: 3
+  - id: SHP-2221
+    origin_label: "Atlanta Foods"
+    origin_lat: 33.6
+    origin_lon: -84.5
+    ready: 2026-09-02T13:00:00+00:00
+    deadline: 2026-09-05T12:00:00+00:00
+    lines:
+      - { sku: CHILL-DAIRY, group: perishable, quantity: 10, size: { slots: 10 }, compat_class: food }
+    requirements:
+      temp_c: [0, 4]
+      dwell_days: 2
+
+disruptions:
+  - { id: DIS-DEMO-1, kind: capacity_reduced, target: MEM-R1,
+      from: 2026-09-03T00:00:00+00:00, until: 2026-09-06T00:00:00+00:00, magnitude: 0.5 }

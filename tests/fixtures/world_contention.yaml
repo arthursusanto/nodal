@@ -1,0 +1,45 @@
+# Contention fixture (roadmap stage 4): S1 (ambient) locally prefers F1's cold
+# zone — the only zone S2 (temperature-controlled) can use. Sequential allocation
+# lets S1 take it and strands S2; the batch solver routes S1 to F2 instead.
+start: 2026-09-01T00:00:00+00:00
+
+facilities:
+  - id: F1
+    name: Cold Hub
+    lat: 40.0
+    lon: -100.0
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 2 }
+    zones:
+      - id: Z1
+        kind: cold
+        capacity: { slots: 12 }
+        temp_c: [-10, 10]
+  - id: F2
+    name: Dry Depot
+    lat: 40.0
+    lon: -101.5
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 2 }
+    zones:
+      - id: Z2
+        kind: rack
+        capacity: { slots: 40 }
+
+shipments:
+  - id: S1
+    origin_label: "Gate West"
+    origin_lat: 40.0
+    origin_lon: -100.2
+    ready: 2026-09-01T06:00:00+00:00
+    lines:
+      - { sku: AMBIENT, group: general, quantity: 10, size: { slots: 10 } }
+  - id: S2
+    origin_label: "Gate East"
+    origin_lat: 40.0
+    origin_lon: -100.3
+    ready: 2026-09-01T07:00:00+00:00
+    lines:
+      - { sku: CHILLED, group: general, quantity: 10, size: { slots: 10 } }
+    requirements:
+      temp_c: [-5, 4]

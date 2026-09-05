@@ -1,0 +1,32 @@
+# Generic network under real disruption pressure: a small, well-utilized
+# network where closures and capacity cuts land on facilities that actually
+# hold bookings. Shipments book 48h ahead, so allocations exist when
+# disruptions hit — the §7.6 re-optimization window. Batch policies re-solve;
+# per-shipment policies live with the hits, and the closure_violations KPI
+# shows the difference.
+name: disrupted-generic
+seed: 42
+horizon_days: 28
+topology:
+  facilities: 6
+  zones_min: 1
+  zones_max: 2
+  slot_capacity_min: 100
+  slot_capacity_max: 200
+  lanes_nearest: 2
+demand:
+  shipments_per_day: 12.0
+  slots_min: 6
+  slots_max: 24
+  dwell_days_min: 3
+  dwell_days_max: 7
+  booking_lead_hours: 48.0
+disruptions:
+  closures_per_30d: 6.0
+  closure_days_min: 2
+  closure_days_max: 4
+  capacity_cuts_per_30d: 6.0
+  cut_magnitude_min: 0.5
+  cut_magnitude_max: 0.8
+  cut_days_min: 2
+  cut_days_max: 5

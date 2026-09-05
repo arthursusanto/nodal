@@ -1,0 +1,16 @@
+# Cold chain under time pressure: short deadlines, most demand temperature-controlled.
+name: coldchain-tight
+seed: 42
+horizon_days: 21
+topology:
+  facilities: 12
+  cold_zone_prob: 0.6
+  coldchain_cert_prob: 0.4
+demand:
+  shipments_per_day: 6.0
+  temp_controlled_prob: 0.65
+  deadline_hours_min: 12
+  deadline_hours_max: 48
+  deadline_prob: 1.0
+objective:
+  packs: [core, coldchain]

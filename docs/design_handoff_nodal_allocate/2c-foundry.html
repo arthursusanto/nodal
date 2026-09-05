@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1440">
+<title>NODAL 2c — Foundry (design reference)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#0d0a07;padding:36px 24px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}.ref-note{max-width:1380px;width:100%;box-sizing:border-box;font:11px/1.6 'JetBrains Mono',monospace;color:#8a8578;border:1px dashed #4a443a;padding:10px 14px}</style>
+</head><body>
+<div class="ref-note">DESIGN REFERENCE ONLY — this file captures the visual language (color, type, chrome, density). All tabs, buttons, labels, workflows and data shown are placeholders and subject to change. Recreate the look in the target codebase; do not ship this HTML.</div>
+<div class="dv-card" data-screen-label="2c Foundry" style="width:1380px;border-radius:4px;background:#17120d;border:1px solid #3a2c1c">
+<div style="font-family:'Barlow Semi Condensed',sans-serif;color:#e3d9c9">
+<div style="display:flex;align-items:center;height:54px;padding:0 18px;gap:16px;background:#1d160f;border-bottom:1px solid #3a2c1c">
+<div style="display:flex;align-items:center;gap:11px"><div style="width:24px;height:24px;border:2px solid #ff7a1a;display:flex;align-items:center;justify-content:center"><div style="width:6px;height:6px;background:#ff7a1a;border-radius:50%"></div></div><div><div style="font-size:16px;font-weight:800;letter-spacing:.16em;line-height:1">NODAL</div><div style="font-family:'JetBrains Mono',monospace;font-size:7.5px;color:#998a74;letter-spacing:.24em;margin-top:2px">NETWORK OPTIMIZER</div></div></div>
+<div style="display:flex;font-size:11px;font-weight:700;letter-spacing:.12em;margin-left:14px">
+<div style="padding:8px 16px;background:#2b1c0d;border:1px solid #ff7a1a;color:#ff7a1a">ALLOCATE</div>
+<div style="padding:8px 16px;border:1px solid #3a2c1c;border-left:none;color:#998a74">NETWORK</div>
+<div style="padding:8px 16px;border:1px solid #3a2c1c;border-left:none;color:#998a74">SIMULATE</div>
+<div style="padding:8px 16px;border:1px solid #3a2c1c;border-left:none;color:#998a74">REPLAY</div></div>
+<div style="margin-left:auto;display:flex;align-items:center;gap:12px"><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#998a74">SHIFT B · 14:31:07</div><div style="display:flex;align-items:center;gap:7px;padding:5px 11px;background:#2a1508;border:1px solid #ff6b3d"><div style="width:7px;height:7px;background:#ff6b3d;border-radius:50%"></div><span style="font-size:10.5px;font-weight:700;letter-spacing:.1em;color:#ff9d7a">3 DISRUPTIONS</span></div></div>
+</div>
+<div style="display:flex;align-items:stretch;border-bottom:1px solid #3a2c1c;font-family:'JetBrains Mono',monospace">
+<div style="flex:1;display:flex;align-items:center;gap:10px;padding:9px 16px;border-right:1px solid #3a2c1c"><span style="font-size:12px;font-weight:700;color:#7dd87d">01 ✓</span><span style="font-size:9px;color:#998a74;letter-spacing:.1em">SELECT — SHP-2214 · PORT HOU</span></div>
+<div style="flex:1;display:flex;align-items:center;gap:10px;padding:9px 16px;border-right:1px solid #3a2c1c"><span style="font-size:12px;font-weight:700;color:#7dd87d">02 ✓</span><span style="font-size:9px;color:#998a74;letter-spacing:.1em">FEASIBILITY — 6 → 3 PASS</span></div>
+<div style="flex:1;display:flex;align-items:center;gap:10px;padding:9px 16px;border-right:1px solid #3a2c1c"><span style="font-size:12px;font-weight:700;color:#7dd87d">03 ✓</span><span style="font-size:9px;color:#998a74;letter-spacing:.1em">SOLVE — MEM 87.4 · 41S</span></div>
+<div style="flex:1;display:flex;align-items:center;gap:10px;padding:9px 16px;background:#2b1c0d"><span style="font-size:12px;font-weight:700;color:#ff7a1a">04 ▸</span><span style="font-size:9px;color:#ffc46b;letter-spacing:.1em">COMMIT — AWAITING OPERATOR</span></div>
+</div>
+<div style="display:flex;height:520px">
+<div style="width:270px;border-right:1px solid #3a2c1c;display:flex;flex-direction:column">
+<div style="padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:#998a74;border-bottom:1px solid #3a2c1c">QUEUE — 7</div>
+<div style="padding:10px 14px;border-bottom:1px solid #241b12;background:#241809;border-left:3px solid #ff7a1a"><div style="display:flex;justify-content:space-between"><span style="font-size:12.5px;font-weight:700">SHP-2214</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#ff7a1a">SOLVED</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#998a74;margin-top:3px">HOU → MEM · 18.4T · 2–8°C</div></div>
+<div style="padding:10px 14px;border-bottom:1px solid #241b12"><div style="display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">SHP-2219</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#998a74">QUEUED</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#6e6250;margin-top:3px">LAX → EAST · 6.1T</div></div>
+<div style="padding:10px 14px;border-bottom:1px solid #241b12"><div style="display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">SHP-2221</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#998a74">QUEUED</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#6e6250;margin-top:3px">DEN → DAL · 11.0T</div></div>
+<div style="padding:10px 14px;border-bottom:1px solid #241b12"><div style="display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">SHP-2226</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#ff9d7a">HELD</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#6e6250;margin-top:3px">CHI OUTFLOW · 22 LOTS</div></div>
+<div style="padding:10px 14px;border-bottom:1px solid #241b12"><div style="display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">SHP-2230</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#998a74">QUEUED</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#6e6250;margin-top:3px">SEA → MSP · 3.2T · FRAGILE</div></div>
+<div style="padding:10px 14px"><div style="display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">SHP-2231</span><span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#ffc46b">TRANSIT</span></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#6e6250;margin-top:3px">DAL → MEM · ETA 02:10</div></div>
+<div style="margin-top:auto;border-top:1px solid #3a2c1c">
+<div style="padding:10px 14px 4px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:#998a74">DISRUPTION BOARD</div>
+<div style="padding:4px 14px 12px;display:flex;flex-direction:column;gap:6px">
+<div style="border-left:3px solid #ff6b3d;padding:4px 9px;background:#1f1206"><div style="font-size:10.5px;font-weight:700">CHI — CLOSED</div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#998a74">PWR MAINT · 27:29 REM</div></div>
+<div style="border-left:3px solid #ffb000;padding:4px 9px;background:#1f1206"><div style="font-size:10.5px;font-weight:700">EWR — DOCKS 0/14</div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#998a74">TO 08-23 06:00</div></div>
+<div style="border-left:3px solid #ffb000;padding:4px 9px;background:#1f1206"><div style="font-size:10.5px;font-weight:700">ATL — COLD FULL</div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#998a74">CLEARS 08-24</div></div></div>
+</div>
+</div>
+<div style="flex:1;position:relative;background-color:#0f0c08;background-image:linear-gradient(rgba(255,122,26,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,122,26,.05) 1px,transparent 1px);background-size:46px 46px">
+<svg viewBox="0 0 1000 520" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
+<path d="M115 319 Q300 360 478 344" stroke="#3d3020" stroke-width="1" fill="none"></path>
+<path d="M46 48 Q290 40 538 100" stroke="#3d3020" stroke-width="1" fill="none"></path>
+<path d="M633 162 Q750 150 862 186" stroke="#3d3020" stroke-width="1" fill="none" stroke-dasharray="3 4"></path>
+<path d="M339 205 Q430 200 516 218" stroke="#3d3020" stroke-width="1" fill="none"></path>
+<path d="M502 405 Q600 390 688 325" stroke="#ff6b3d" stroke-width="1" fill="none" stroke-dasharray="2 4" opacity=".65"></path>
+<path d="M502 405 Q720 340 862 186" stroke="#ff6b3d" stroke-width="1" fill="none" stroke-dasharray="2 4" opacity=".65"></path>
+<path d="M502 405 Q600 260 712 201" stroke="#ff7a1a" stroke-width="1" fill="none" stroke-dasharray="6 5" opacity=".5"></path>
+<path d="M502 405 Q490 300 516 218" stroke="#ff7a1a" stroke-width="1" fill="none" stroke-dasharray="6 5" opacity=".5"></path>
+<path d="M502 405 Q536 336 592 297" stroke="#ff7a1a" stroke-width="3" fill="none"></path>
+<circle cx="541" cy="344" r="4.5" fill="#ff7a1a"></circle>
+</svg>
+<div style="position:absolute;left:4.6%;top:9.2%;transform:translate(-50%,-50%)"><div style="width:8px;height:8px;background:#5c5344"></div></div>
+<div style="position:absolute;left:11.5%;top:61.3%;transform:translate(-50%,-50%)"><div style="width:8px;height:8px;background:#5c5344"></div></div>
+<div style="position:absolute;left:21.9%;top:63.7%;transform:translate(-50%,-50%)"><div style="width:8px;height:8px;background:#5c5344"></div></div>
+<div style="position:absolute;left:33.9%;top:39.5%;transform:translate(-50%,-50%)"><div style="width:8px;height:8px;background:#5c5344"></div></div>
+<div style="position:absolute;left:47.8%;top:66.2%;transform:translate(-50%,-50%)"><div style="width:8px;height:8px;background:#5c5344"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#6e6250;margin-top:2px">DAL</div></div>
+<div style="position:absolute;left:53.8%;top:19.3%;transform:translate(-50%,-50%)"><div style="width:8px;height:8px;background:#5c5344"></div></div>
+<div style="position:absolute;left:51.6%;top:41.9%;transform:translate(-50%,-50%)"><div style="width:11px;height:11px;border:2px solid #ffc46b;background:#0f0c08"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#c4b8a4;margin-top:3px">KC 64.8</div></div>
+<div style="position:absolute;left:71.2%;top:38.6%;transform:translate(-50%,-50%)"><div style="width:11px;height:11px;border:2px solid #ffc46b;background:#0f0c08"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#c4b8a4;margin-top:3px">CMH 71.2</div></div>
+<div style="position:absolute;left:50.2%;top:77.8%;transform:translate(-50%,-50%)"><div style="width:13px;height:13px;border:2px solid #e3d9c9;transform:rotate(45deg);background:#0f0c08"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#e3d9c9;margin-top:5px;font-weight:700">HOU ORIGIN</div></div>
+<div style="position:absolute;left:59.2%;top:57.1%;transform:translate(-50%,-50%)"><div style="width:14px;height:14px;background:#ff7a1a;box-shadow:0 0 18px rgba(255,122,26,.65)"></div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#17120d;background:#ff7a1a;padding:2px 6px;margin-top:4px;font-weight:700">MEM 87.4</div></div>
+<div style="position:absolute;left:68.8%;top:62.5%;transform:translate(-50%,-50%)"><div style="width:10px;height:10px;background:#4a1f12;border:1px solid #ff6b3d"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ff9d7a;margin-top:3px">ATL R-102</div></div>
+<div style="position:absolute;left:86.2%;top:35.7%;transform:translate(-50%,-50%)"><div style="width:10px;height:10px;background:#4a1f12;border:1px solid #ff6b3d"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ff9d7a;margin-top:3px">EWR R-201</div></div>
+<div style="position:absolute;left:63.3%;top:31.2%;transform:translate(-50%,-50%)"><div style="width:11px;height:11px;border:1px dashed #ff6b3d;background:repeating-linear-gradient(45deg,rgba(255,107,61,.35) 0 3px,transparent 3px 7px)"></div><div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#ff9d7a;margin-top:3px">CHI CLOSED</div></div>
+<div style="position:absolute;top:10px;right:12px;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#998a74;border:1px solid #3a2c1c;padding:3px 8px;background:rgba(15,12,8,.8)">CONUS · SOLVE #4,412</div>
+<div style="position:absolute;bottom:10px;left:12px;right:12px;display:flex;gap:8px;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#998a74">
+<div style="flex:1;background:rgba(15,12,8,.85);border:1px solid #3a2c1c;padding:6px 10px">MEM COLD ZONE <span style="color:#ffc46b">71% → 78%</span> AFTER COMMIT · CLEARS 08-25</div>
+<div style="background:rgba(15,12,8,.85);border:1px solid #3a2c1c;padding:6px 10px">Δ COST VS GREEDY <span style="color:#7dd87d">−$1,120</span></div></div>
+</div>
+<div style="width:300px;border-left:1px solid #3a2c1c;display:flex;flex-direction:column;background:#140f0a">
+<div style="padding:10px 14px;border-bottom:1px solid #3a2c1c;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:#998a74">SOLVE RESULT</div>
+<div style="padding:12px 14px;border-bottom:1px solid #241b12;background:#1c1207">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13.5px;font-weight:800">MEM — MEMPHIS</span><span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#ff7a1a">87.4</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#998a74;margin-top:7px"><span>$2,140</span><span>642 MI</span><span>RISK 2%</span><span>UTIL 74→78</span></div></div>
+<div style="padding:8px 14px;border-bottom:1px solid #241b12;display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">CMH</span><span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#998a74">71.2 · +$1,840</span></div>
+<div style="padding:8px 14px;border-bottom:1px solid #241b12;display:flex;justify-content:space-between"><span style="font-size:11.5px;color:#c4b8a4;font-weight:600">KC</span><span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;color:#998a74">64.8 · RISK 12%</span></div>
+<div style="padding:9px 14px 4px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:#6e6250">REJECTED</div>
+<div style="padding:0 14px 10px;display:flex;flex-direction:column;gap:5px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#998a74">
+<div><span style="color:#ff6b3d;font-weight:700">R-102</span> ATL — COLD FULL THRU 08-24</div>
+<div><span style="color:#ff6b3d;font-weight:700">R-201</span> EWR — DOCKS TO 08-23</div>
+<div><span style="color:#ff6b3d;font-weight:700">R-305</span> CHI — CLOSED · PWR</div></div>
+<div style="padding:10px 14px;border-top:1px solid #241b12">
+<div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.18em;color:#6e6250;margin-bottom:8px">VS SIMPLE POLICIES · WEEKLY</div>
+<div style="display:flex;flex-direction:column;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px">
+<div><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="color:#ff7a1a;font-weight:700">NODAL</span><span style="color:#ff7a1a">$412K</span></div><div style="height:7px;background:#241b12"><div style="width:73%;height:7px;background:#ff7a1a"></div></div></div>
+<div><div style="display:flex;justify-content:space-between;margin-bottom:3px;color:#998a74"><span>GREEDY</span><span>$438K</span></div><div style="height:7px;background:#241b12"><div style="width:78%;height:7px;background:#5c5344"></div></div></div>
+<div><div style="display:flex;justify-content:space-between;margin-bottom:3px;color:#998a74"><span>NEAREST</span><span>$467K</span></div><div style="height:7px;background:#241b12"><div style="width:83%;height:7px;background:#5c5344"></div></div></div></div></div>
+<div style="margin-top:auto;padding:12px 14px;border-top:1px solid #3a2c1c;display:flex;gap:7px">
+<div style="flex:1.5;text-align:center;padding:10px 0;background:#ff7a1a;color:#17120d;font-size:11.5px;font-weight:800;letter-spacing:.12em">COMMIT</div>
+<div style="flex:1;text-align:center;padding:10px 0;border:1px solid #4a3a24;color:#c4b8a4;font-size:11.5px;font-weight:600;letter-spacing:.12em">WHAT-IF</div></div>
+</div>
+</div>
+<div style="display:flex;align-items:center;height:26px;border-top:1px solid #3a2c1c;background:repeating-linear-gradient(45deg,rgba(255,122,26,.06) 0 9px,transparent 9px 18px);padding:0 18px;gap:10px;font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#998a74;white-space:nowrap;overflow:hidden">
+<span>14:31:07 SOLVE COMPLETE Δ−$4,120</span><span style="color:#3a2c1c">▪</span><span>14:29:41 SHP-2231 DEPARTED DAL</span><span style="color:#3a2c1c">▪</span><span style="color:#ff9d7a">14:27:02 CHI +6H</span><span style="color:#3a2c1c">▪</span><span>14:24:56 SHP-2214 ARRIVED HOU</span><span style="color:#3a2c1c">▪</span><span>14:22:10 MEM Z-C FORECAST 92% BY 08-24</span>
+</div>
+</div>
+</div>
+</body></html>

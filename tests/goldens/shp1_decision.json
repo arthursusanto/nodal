@@ -1,0 +1,453 @@
+{
+  "shipment_id": "SHP-1",
+  "decided_at": "2026-09-01T08:00:00Z",
+  "mode": "single",
+  "policy": "nodal-single",
+  "based_on_seq": 20,
+  "config_snapshot": {
+    "name": "default",
+    "weights": {
+      "transport_cost": 0.35,
+      "travel_time": 0.1,
+      "lateness_risk": 0.2,
+      "congestion": 0.1,
+      "inv_balance": 0.05,
+      "capacity_preservation": 0.1,
+      "transfers": 0.05,
+      "op_risk": 0.05
+    },
+    "cost_ref_cents": 50000,
+    "time_ref_minutes": 720,
+    "buffer_ref_minutes": 1440,
+    "congestion_curve": [
+      {
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "x": 0.6,
+        "y": 0.05
+      },
+      {
+        "x": 0.8,
+        "y": 0.25
+      },
+      {
+        "x": 0.9,
+        "y": 0.6
+      },
+      {
+        "x": 1.0,
+        "y": 1.0
+      }
+    ],
+    "cover_days": 14,
+    "scarcity_k": 2,
+    "scarcity_bonus": 1.0,
+    "default_dwell_days": 4,
+    "disruption_adjacency_risk": 0.25,
+    "util_band": [
+      0.55,
+      0.85
+    ],
+    "top_k_detail": 8,
+    "solver": {
+      "det_time_budget": 60.0,
+      "workers": 1,
+      "random_seed": 0,
+      "max_wall_seconds": null,
+      "unassigned_penalty": 25.0,
+      "warm_start": false
+    },
+    "rebalance_surplus_ratio": 0.5,
+    "rebalance_max_per_cycle": 5,
+    "churn_penalty": 0.5,
+    "reopt_degradation_threshold": 2.0,
+    "reopt_hops": 1,
+    "packs": [
+      "core"
+    ],
+    "pack_weights": {},
+    "travel": {
+      "metric": "cost",
+      "circuity": 1.3,
+      "synth_speed_kmh": 70.0,
+      "synth_cost_fixed_cents": 15000,
+      "synth_cost_per_km_cents": 120,
+      "max_transfers": 2,
+      "handling_minutes": 45,
+      "handling_minutes_by_mode": {}
+    },
+    "road": {
+      "circuity": 1.3,
+      "speed_kmh": 68.0,
+      "handling_minutes": 45,
+      "cost_fixed_cents": 15000,
+      "cost_per_km_cents": 120,
+      "cost_per_kg_cents": 0.0
+    }
+  },
+  "engine_version": "<v>",
+  "tzdata_version": "<v>",
+  "considered": [
+    "FAC-A",
+    "FAC-B",
+    "FAC-C"
+  ],
+  "rejected": [
+    {
+      "facility_id": "FAC-C",
+      "facility_verdicts": [
+        {
+          "constraint_id": "EQUIPMENT_MISSING",
+          "data": {
+            "tags": [
+              "equip:forklift"
+            ]
+          }
+        }
+      ],
+      "zone_verdicts": {}
+    }
+  ],
+  "scored": [
+    {
+      "facility_id": "FAC-A",
+      "zone_id": "ZON-A1",
+      "route": {
+        "legs": [
+          {
+            "from_label": "Gate East",
+            "to_facility_id": "FAC-A",
+            "lane_id": null,
+            "minutes": 66,
+            "km": 77.2,
+            "cost_cents": 24263
+          }
+        ],
+        "minutes": 66,
+        "wait_minutes": 0,
+        "km": 77.2,
+        "cost_cents": 24263,
+        "transfers": 0
+      },
+      "eta": "2026-09-01T09:06:00Z",
+      "departure": "2026-09-06T09:06:00Z",
+      "components": {
+        "transport_cost": {
+          "raw": 24263.0,
+          "normalized": 0.48526,
+          "weight": 0.35,
+          "contribution": 0.169841,
+          "baseline": null
+        },
+        "travel_time": {
+          "raw": 66.0,
+          "normalized": 0.09166666666666666,
+          "weight": 0.1,
+          "contribution": 0.009166666666666667,
+          "baseline": null
+        },
+        "lateness_risk": {
+          "raw": 2334.0,
+          "normalized": 0.0,
+          "weight": 0.2,
+          "contribution": 0.0,
+          "baseline": null
+        },
+        "congestion": {
+          "raw": 0.25,
+          "normalized": 0.008333333333333335,
+          "weight": 0.1,
+          "contribution": 0.0008333333333333335,
+          "baseline": 0.15
+        },
+        "inv_balance": {
+          "raw": 0.0,
+          "normalized": 0.0,
+          "weight": 0.05,
+          "contribution": 0.0,
+          "baseline": 0.0
+        },
+        "capacity_preservation": {
+          "raw": 0.16666666666666666,
+          "normalized": 0.3333333333333333,
+          "weight": 0.1,
+          "contribution": 0.03333333333333333,
+          "baseline": null
+        },
+        "transfers": {
+          "raw": 0.0,
+          "normalized": 0.0,
+          "weight": 0.05,
+          "contribution": 0.0,
+          "baseline": null
+        },
+        "op_risk": {
+          "raw": 0.0,
+          "normalized": 0.0,
+          "weight": 0.05,
+          "contribution": 0.0,
+          "baseline": null
+        }
+      },
+      "total": 0.213174333,
+      "zone_verdicts": {}
+    },
+    {
+      "facility_id": "FAC-B",
+      "zone_id": "ZON-B2",
+      "route": {
+        "legs": [
+          {
+            "from_label": "Gate East",
+            "to_facility_id": "FAC-B",
+            "lane_id": null,
+            "minutes": 461,
+            "km": 537.3,
+            "cost_cents": 79474
+          }
+        ],
+        "minutes": 461,
+        "wait_minutes": 0,
+        "km": 537.3,
+        "cost_cents": 79474,
+        "transfers": 0
+      },
+      "eta": "2026-09-01T15:41:00Z",
+      "departure": "2026-09-06T15:41:00Z",
+      "components": {
+        "transport_cost": {
+          "raw": 79474.0,
+          "normalized": 1.58948,
+          "weight": 0.35,
+          "contribution": 0.556318,
+          "baseline": null
+        },
+        "travel_time": {
+          "raw": 461.0,
+          "normalized": 0.6402777777777777,
+          "weight": 0.1,
+          "contribution": 0.06402777777777778,
+          "baseline": null
+        },
+        "lateness_risk": {
+          "raw": 1939.0,
+          "normalized": 0.0,
+          "weight": 0.2,
+          "contribution": 0.0,
+          "baseline": null
+        },
+        "congestion": {
+          "raw": 0.6666666666666666,
+          "normalized": 0.0,
+          "weight": 0.1,
+          "contribution": 0.0,
+          "baseline": 0.6666666666666666
+        },
+        "inv_balance": {
+          "raw": 0.6726190476190477,
+          "normalized": -0.1785714285714285,
+          "weight": 0.05,
+          "contribution": -0.008928571428571425,
+          "baseline": 0.8511904761904762
+        },
+        "capacity_preservation": {
+          "raw": 0.015,
+          "normalized": 0.03,
+          "weight": 0.1,
+          "contribution": 0.003,
+          "baseline": null
+        },
+        "transfers": {
+          "raw": 0.0,
+          "normalized": 0.0,
+          "weight": 0.05,
+          "contribution": 0.0,
+          "baseline": null
+        },
+        "op_risk": {
+          "raw": 0.25,
+          "normalized": 0.25,
+          "weight": 0.05,
+          "contribution": 0.0125,
+          "baseline": null
+        }
+      },
+      "total": 0.626917206,
+      "zone_verdicts": {
+        "ZON-B1": [
+          {
+            "constraint_id": "CAPACITY",
+            "data": {
+              "dimension": "slots",
+              "need": 15,
+              "headroom": 10,
+              "day": "2026-09-03"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "chosen": {
+    "facility_id": "FAC-A",
+    "zone_id": "ZON-A1",
+    "route": {
+      "legs": [
+        {
+          "from_label": "Gate East",
+          "to_facility_id": "FAC-A",
+          "lane_id": null,
+          "minutes": 66,
+          "km": 77.2,
+          "cost_cents": 24263
+        }
+      ],
+      "minutes": 66,
+      "wait_minutes": 0,
+      "km": 77.2,
+      "cost_cents": 24263,
+      "transfers": 0
+    },
+    "eta": "2026-09-01T09:06:00Z",
+    "departure": "2026-09-06T09:06:00Z",
+    "size": {
+      "slots": 15,
+      "volume_l": 0,
+      "weight_g": 6000000
+    },
+    "reservation_ids": [
+      "RES-SHP-1-1"
+    ],
+    "itinerary": null,
+    "staging": [],
+    "stops": [
+      {
+        "facility_id": "FAC-A",
+        "role": "hold",
+        "arrive": "2026-09-01T09:06:00Z",
+        "depart": "2026-09-06T09:06:00Z",
+        "zone_id": "ZON-A1"
+      }
+    ],
+    "legs": []
+  },
+  "capacity_impact": {
+    "zone_id": "ZON-A1",
+    "buckets": [
+      {
+        "day": "2026-09-01",
+        "capacity": {
+          "slots": 100,
+          "volume_l": null,
+          "weight_g": 200000000
+        },
+        "occupancy_before": {
+          "slots": 10,
+          "volume_l": 0,
+          "weight_g": 8000000
+        },
+        "occupancy_after": {
+          "slots": 25,
+          "volume_l": 0,
+          "weight_g": 14000000
+        }
+      },
+      {
+        "day": "2026-09-02",
+        "capacity": {
+          "slots": 100,
+          "volume_l": null,
+          "weight_g": 200000000
+        },
+        "occupancy_before": {
+          "slots": 10,
+          "volume_l": 0,
+          "weight_g": 8000000
+        },
+        "occupancy_after": {
+          "slots": 25,
+          "volume_l": 0,
+          "weight_g": 14000000
+        }
+      },
+      {
+        "day": "2026-09-03",
+        "capacity": {
+          "slots": 100,
+          "volume_l": null,
+          "weight_g": 200000000
+        },
+        "occupancy_before": {
+          "slots": 10,
+          "volume_l": 0,
+          "weight_g": 8000000
+        },
+        "occupancy_after": {
+          "slots": 25,
+          "volume_l": 0,
+          "weight_g": 14000000
+        }
+      },
+      {
+        "day": "2026-09-04",
+        "capacity": {
+          "slots": 100,
+          "volume_l": null,
+          "weight_g": 200000000
+        },
+        "occupancy_before": {
+          "slots": 10,
+          "volume_l": 0,
+          "weight_g": 8000000
+        },
+        "occupancy_after": {
+          "slots": 25,
+          "volume_l": 0,
+          "weight_g": 14000000
+        }
+      },
+      {
+        "day": "2026-09-05",
+        "capacity": {
+          "slots": 100,
+          "volume_l": null,
+          "weight_g": 200000000
+        },
+        "occupancy_before": {
+          "slots": 10,
+          "volume_l": 0,
+          "weight_g": 8000000
+        },
+        "occupancy_after": {
+          "slots": 25,
+          "volume_l": 0,
+          "weight_g": 14000000
+        }
+      },
+      {
+        "day": "2026-09-06",
+        "capacity": {
+          "slots": 100,
+          "volume_l": null,
+          "weight_g": 200000000
+        },
+        "occupancy_before": {
+          "slots": 10,
+          "volume_l": 0,
+          "weight_g": 8000000
+        },
+        "occupancy_after": {
+          "slots": 25,
+          "volume_l": 0,
+          "weight_g": 14000000
+        }
+      }
+    ]
+  },
+  "solver": null,
+  "batch_context": null,
+  "reopt_tier": null,
+  "reopt_trigger": null
+}

@@ -1,0 +1,31 @@
+{
+  "scenario": "ci-tiny",
+  "policy": "nodal-single",
+  "seed": 7,
+  "profile": "default",
+  "outcome": {
+    "shipments": 32,
+    "allocated": 32,
+    "unallocated": 0,
+    "total_cost_cents": 3243405,
+    "total_km": 23653.4,
+    "transfers": 0,
+    "infeasible_preferred": 0,
+    "arrivals": 32,
+    "on_time_rate": 1.0,
+    "lateness_mean_min": 0.0,
+    "lateness_p95_min": 0.0,
+    "util_band_residency": 0.0,
+    "closure_violations": 0,
+    "imbalance_mean": 0.8946,
+    "imbalance_general_mean": 0.9327,
+    "imbalance_priority_mean": 0.8564,
+    "util_slots_mean": 0.0674,
+    "util_slots_var": 0.00527,
+    "util_slots_p95": 0.216,
+    "util_weight_g_mean": 0.0221,
+    "util_weight_g_var": 0.00046,
+    "util_weight_g_p95": 0.0588
+  },
+  "performance": {}
+}

@@ -1,0 +1,30 @@
+# Rebalancing scenario (roadmap stage 4): inflow outruns consumption, so stock
+# piles up wherever shipments happen to land and §7.7 transfer generation has
+# real surpluses to move, under an objective that actually pays for balance.
+# Backs the bench-marked runner regression: a full run must leave a log that
+# replays end to end.
+name: generic-rebalance
+seed: 42
+horizon_days: 21
+rebalance: true
+topology:
+  facilities: 5
+  zones_min: 1
+  zones_max: 2
+  slot_capacity_min: 80
+  slot_capacity_max: 160
+  lanes_nearest: 2
+  demand_rate_min: 1
+  demand_rate_max: 6
+demand:
+  shipments_per_day: 7.0
+  slots_min: 8
+  slots_max: 24
+  dwell_days_min: 4
+  dwell_days_max: 9
+objective:
+  name: rebalance-heavy
+  cover_days: 3
+  weights:
+    transport_cost: 0.25
+    inv_balance: 0.30

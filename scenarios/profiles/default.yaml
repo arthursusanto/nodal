@@ -1,0 +1,42 @@
+# Default objective profile (§7.8). Every value here is snapshotted into each
+# decision record; change priorities by editing profiles, not code.
+name: default
+
+weights:
+  transport_cost: 0.35
+  travel_time: 0.10
+  lateness_risk: 0.20
+  congestion: 0.10
+  inv_balance: 0.05
+  capacity_preservation: 0.10
+  transfers: 0.05
+  op_risk: 0.05
+
+cost_ref_cents: 50000
+time_ref_minutes: 720
+buffer_ref_minutes: 1440
+
+congestion_curve:
+  - { x: 0.00, y: 0.00 }
+  - { x: 0.60, y: 0.05 }
+  - { x: 0.80, y: 0.25 }
+  - { x: 0.90, y: 0.60 }
+  - { x: 1.00, y: 1.00 }
+
+cover_days: 14
+scarcity_k: 2
+scarcity_bonus: 1.0
+default_dwell_days: 4
+disruption_adjacency_risk: 0.25
+
+# Vertical packs opt in per scenario (coldchain scenarios set their own list);
+# the default profile matches the engine default: generic core only.
+packs: [core]
+
+travel:
+  metric: cost
+  circuity: 1.3
+  synth_speed_kmh: 70
+  synth_cost_fixed_cents: 15000
+  synth_cost_per_km_cents: 120
+  max_transfers: 2

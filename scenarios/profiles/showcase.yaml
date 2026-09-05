@@ -1,0 +1,31 @@
+# Objective profile for the showcase global demo world (§7.8).
+#
+# `scripts/make_global_demo.py` SOLVES under this file and the server must SERVE
+# under it, or the commit of the world's pending plan re-solves differently and
+# is refused forever (§7.5). It is the single source of truth for both:
+#
+#   python scripts/make_global_demo.py
+#   python -m server --db var/global-demo.sqlite3 \
+#       --profile scenarios/profiles/showcase.yaml --packs core,coldchain,chem
+#
+# Only the fields that differ from the engine defaults are set; everything else
+# (weights, reference scales, congestion curve, solver budgets) is the default
+# profile's, so this file stays a readable statement of what the demo changes.
+name: showcase
+
+# The world is seeded with cold-chain and hazmat goods: solving without these
+# packs would silently drop their constraints.
+packs: [core, coldchain, chem]
+
+travel:
+  # Three lane legs per route half (rather than the default two) let an
+  # itinerary cross an ocean and still reach inland.
+  max_transfers: 3
+  # Dedicated drayage is priced far above a consolidated line-haul lane per km,
+  # which is what makes the network do the work: goods enter at a nearby hub and
+  # travel on lanes rather than on a single thousand-kilometre synthesized arc.
+  synth_cost_per_km_cents: 400
+
+road:
+  # Same pricing for the first/last mile of a delivery (§7.9).
+  cost_per_km_cents: 400

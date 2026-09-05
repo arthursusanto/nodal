@@ -1,0 +1,22 @@
+# Capacity-contention scenario (roadmap stage 3): a small network under heavy,
+# long-dwelling demand, where myopic policies fill the good facilities and pay
+# for it later. The documented demonstration that feasibility-aware scoring wins
+# when capacity interacts.
+name: generic-contention
+seed: 42
+horizon_days: 28
+topology:
+  facilities: 5
+  zones_min: 1
+  zones_max: 2
+  slot_capacity_min: 80
+  slot_capacity_max: 160
+  lanes_nearest: 2
+demand:
+  shipments_per_day: 9.0
+  slots_min: 8
+  slots_max: 28
+  dwell_days_min: 5
+  dwell_days_max: 10
+  deadline_hours_min: 36
+  deadline_hours_max: 96

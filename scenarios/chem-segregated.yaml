@@ -1,0 +1,26 @@
+# Chemical-storage vertical (§8, stage 6): a network where a substantial share
+# of shipments carry segregation classes, only some facilities hold the hazmat
+# certification, and the chem pack's matrix keeps incompatible classes apart.
+name: chem-segregated
+seed: 42
+horizon_days: 21
+topology:
+  facilities: 8
+  zones_min: 1
+  zones_max: 3
+  slot_capacity_min: 120
+  slot_capacity_max: 300
+  lanes_nearest: 2
+  hazmat_cert_prob: 0.6
+demand:
+  shipments_per_day: 8.0
+  slots_min: 4
+  slots_max: 20
+  compat_class_probs:
+    corrosive-acid: 0.10
+    corrosive-base: 0.10
+    flammable: 0.15
+    oxidizer: 0.08
+objective:
+  name: chem
+  packs: [core, chem]

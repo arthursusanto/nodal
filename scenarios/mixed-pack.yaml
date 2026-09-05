@@ -1,0 +1,29 @@
+# Mixed-vertical network (§8, stage 6): cold-chain and chemical shipments in
+# ONE network under both packs at once — the industry-neutrality proof. Cert
+# coverage is partial on both axes, so feasibility genuinely partitions the
+# facility set differently per shipment.
+name: mixed-pack
+seed: 42
+horizon_days: 21
+topology:
+  facilities: 10
+  zones_min: 1
+  zones_max: 3
+  slot_capacity_min: 120
+  slot_capacity_max: 300
+  lanes_nearest: 3
+  cold_zone_prob: 0.5
+  coldchain_cert_prob: 0.6
+  hazmat_cert_prob: 0.5
+demand:
+  shipments_per_day: 8.0
+  slots_min: 4
+  slots_max: 20
+  temp_controlled_prob: 0.30
+  compat_class_probs:
+    corrosive-acid: 0.08
+    corrosive-base: 0.08
+    flammable: 0.10
+objective:
+  name: mixed
+  packs: [core, coldchain, chem]

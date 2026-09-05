@@ -1,0 +1,15 @@
+# Tiny deterministic scenario for CI regression goldens (stage 3).
+name: ci-tiny
+seed: 7
+horizon_days: 10
+topology:
+  facilities: 5
+  zones_min: 1
+  zones_max: 2
+  slot_capacity_min: 150
+  slot_capacity_max: 300
+  lanes_nearest: 2
+demand:
+  shipments_per_day: 3.0
+  slots_min: 4
+  slots_max: 16

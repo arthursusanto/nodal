@@ -1,0 +1,15 @@
+# Cold-chain vertical profile: half the demand is temperature-controlled; only
+# certified facilities with cold zones can take it (packs: coldchain active).
+name: coldchain-mixed
+seed: 42
+horizon_days: 28
+topology:
+  facilities: 15
+  cold_zone_prob: 0.5
+  coldchain_cert_prob: 0.45
+demand:
+  shipments_per_day: 7.0
+  temp_controlled_prob: 0.5
+  frozen_prob: 0.3
+objective:
+  packs: [core, coldchain]

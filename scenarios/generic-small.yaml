@@ -1,0 +1,11 @@
+# Small generic-3PL scenario: light load, no disruptions.
+name: generic-small
+seed: 42
+horizon_days: 21
+topology:
+  facilities: 8
+  slot_capacity_min: 200
+  slot_capacity_max: 500
+demand:
+  shipments_per_day: 4.0
+  weekday_factors: [1.2, 1.1, 1.0, 1.0, 1.1, 0.6, 0.4]

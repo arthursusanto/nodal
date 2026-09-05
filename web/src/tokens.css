@@ -1,0 +1,136 @@
+/* Foundry design tokens (design handoff 2c) — sodium-orange heavy industry.
+   Radius 0 inside, 4px outer card only; no CSS animations anywhere: every state
+   must be reachable with OS reduced-motion enabled.
+
+   Every size below is in rem: the root font size IS the interface scale (the
+   header's A−/A+ control sets it), so text, panels and hit areas grow
+   together. Baseline 16px root ≈ 15px body text. */
+:root {
+  --bg-page: #17120d;
+  --bg-header: #1d160f;
+  --bg-panel: #140f0a;
+  --bg-map: #0f0c08;
+  --bg-stage-active: #2b1c0d;
+  --bg-row-selected: #241809;
+  --bg-winner: #1c1207;
+  --bg-alarm: #1f1206;
+
+  --border-primary: #3a2c1c;
+  --border-hairline: #241b12;
+  --border-map: #3d3020;
+
+  --text-primary: #e3d9c9;
+  --text-secondary: #c4b8a4;
+  --text-muted: #998a74;
+  --text-faint: #6e6250;
+
+  --accent: #ff7a1a;
+  --accent-soft: #ffc46b;
+  --accent-mid: #ffb000;
+  --on-accent: #17120d;
+
+  --alert: #ff6b3d;
+  --alert-light: #ff9d7a;
+  --success: #7dd87d;
+  --reject-fill: #4a1f12;
+
+  --font-heading: "Barlow Semi Condensed", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+
+  /* Panel geometry, shared with the map's fit paddings (MapView). */
+  --panel-left: 23rem;
+  --panel-right: 27rem;
+  --gutter: 0.75rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 1px solid var(--border-primary);
+  cursor: pointer;
+  min-height: 2rem;
+  padding: 0.3rem 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+input,
+select {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  border: 1px solid var(--border-primary);
+  padding: 0.3rem 0.45rem;
+  min-height: 2rem;
+  /* Checkboxes and the replay slider are browser-painted: hand them the
+     palette rather than leaving system blue in a sodium-orange interface. */
+  accent-color: var(--accent);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.micro {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+/* Ids like SCL-R1 carry a hyphen, which is a break opportunity no
+   overflow-wrap value suppresses: keep such a fragment whole on one line. */
+.nowrap {
+  white-space: nowrap;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-primary);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

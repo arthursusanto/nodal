@@ -1,0 +1,95 @@
+# Small fixture world: 3 facilities, 5 zones, lanes both ways round, initial
+# inventory, two open shipments, one capacity disruption starting day 3.
+start: 2026-09-01T00:00:00+00:00
+
+facilities:
+  - id: FAC-A
+    name: Aurora Hub
+    lat: 41.76
+    lon: -88.32
+    tz: America/Chicago
+    tags: [cross-dock, "equip:forklift", "security:fenced"]
+    equipment: { "equip:forklift": 4 }
+    zones:
+      - id: ZON-A1
+        kind: rack
+        capacity: { slots: 100, weight_kg: 200000 }
+      - id: ZON-A2
+        kind: cold
+        capacity: { slots: 40 }
+        temp_c: [-25, 5]
+  - id: FAC-B
+    name: Beacon Depot
+    lat: 39.10
+    lon: -84.51
+    tz: America/New_York
+    tags: ["equip:forklift"]
+    equipment: { "equip:forklift": 2 }
+    zones:
+      - id: ZON-B1
+        kind: rack
+        capacity: { slots: 60 }
+      - id: ZON-B2
+        kind: bulk
+        capacity: { volume_m3: 500, weight_kg: 400000 }
+  - id: FAC-C
+    name: Cedar Point
+    lat: 35.15
+    lon: -90.05
+    tz: America/Chicago
+    tags: ["equip:forklift", "cert:organic"]
+    certifications:
+      - { tag: "cert:organic", valid_until: 2027-01-01T00:00:00+00:00 }
+    calendar:
+      week:
+        "0": ["08:00-18:00"]
+        "1": ["08:00-18:00"]
+        "2": ["08:00-18:00"]
+        "3": ["08:00-18:00"]
+        "4": ["08:00-18:00"]
+    zones:
+      - id: ZON-C1
+        kind: rack
+        capacity: { slots: 80 }
+
+lanes:
+  - { id: LANE-AB, from: FAC-A, to: FAC-B, km: 460, minutes: 420, cost_fixed: 380, cost_per_kg_cents: 0.02 }
+  - { id: LANE-BA, from: FAC-B, to: FAC-A, km: 460, minutes: 420, cost_fixed: 380, cost_per_kg_cents: 0.02 }
+  - { id: LANE-AC, from: FAC-A, to: FAC-C, km: 780, minutes: 700, cost_fixed: 520, cost_per_kg_cents: 0.03 }
+  - { id: LANE-CB, from: FAC-C, to: FAC-B, km: 730, minutes: 660, cost_fixed: 495, cost_per_kg_cents: 0.03 }
+
+demand_rates:
+  - { facility: FAC-B, group: general, per_day: 12 }
+  - { facility: FAC-C, group: general, per_day: 6 }
+
+lots:
+  - { id: LOT-1, zone: ZON-A1, group: general, quantity: 40, size: { slots: 10, weight_kg: 8000 } }
+  - { id: LOT-2, zone: ZON-A2, group: perishable, quantity: 12, size: { slots: 6 }, compat_class: food }
+  - { id: LOT-3, zone: ZON-B1, group: general, quantity: 25, size: { slots: 20 },
+      planned_departure: 2026-09-04T00:00:00+00:00 }
+
+shipments:
+  - id: SHP-1
+    origin_label: "Gate East"
+    origin_lat: 41.95
+    origin_lon: -87.65
+    ready: 2026-09-01T06:00:00+00:00
+    deadline: 2026-09-03T00:00:00+00:00
+    lines:
+      - { sku: WIDGET, group: general, quantity: 30, size: { slots: 15, weight_kg: 6000 } }
+    requirements:
+      required_tags: ["equip:forklift"]
+      dwell_days: 5
+  - id: SHP-2
+    origin: FAC-A
+    ready: 2026-09-01T08:00:00+00:00
+    deadline: 2026-09-05T00:00:00+00:00
+    lines:
+      - { sku: BERRIES, group: perishable, quantity: 10, size: { slots: 8 }, compat_class: food }
+    requirements:
+      temp_c: [-5, 4]
+      dwell_days: 2
+
+disruptions:
+  - { id: DIS-1, kind: capacity_reduced, target: ZON-B1, from: 2026-09-03T00:00:00+00:00,
+      until: 2026-09-05T00:00:00+00:00, magnitude: 0.5 }

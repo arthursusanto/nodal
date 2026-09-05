@@ -1,0 +1,10 @@
+# Broad generic network: 40 facilities, moderate load, mild weekday seasonality.
+name: generic-broad
+seed: 42
+horizon_days: 28
+topology:
+  facilities: 40
+  lanes_nearest: 3
+demand:
+  shipments_per_day: 10.0
+  weekday_factors: [1.2, 1.1, 1.0, 1.0, 1.1, 0.5, 0.3]

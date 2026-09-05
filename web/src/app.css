@@ -1,0 +1,1314 @@
+/* Chrome layout: header / stepper / fullscreen map stage.
+   Overlay panels float over the map; the map never shrinks to a tile.
+   All sizes in rem — see tokens.css. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  height: 3.4rem;
+  padding: 0 0.9rem;
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-primary);
+  flex: none;
+}
+
+.logo-plate {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 2px solid var(--accent);
+  position: relative;
+}
+.logo-plate::after {
+  content: "";
+  position: absolute;
+  inset: 0.35rem;
+  background: var(--accent);
+}
+
+.wordmark {
+  flex: none;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.2em;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  /* The status cluster keeps its size; the view switch is what compacts. */
+  flex: none;
+}
+.header-right .chip {
+  white-space: nowrap;
+}
+
+.scale-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-muted);
+  margin-right: 0.5rem;
+}
+.scale-control button {
+  min-height: 1.7rem;
+  padding: 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.chip {
+  border: 1px solid var(--border-primary);
+  padding: 0.25rem 0.55rem;
+  color: var(--text-secondary);
+}
+.chip.alarm {
+  border-color: var(--alert);
+  color: var(--alert-light);
+}
+.chip.replay-chip {
+  border-color: var(--accent-mid);
+  color: var(--accent-mid);
+  background: var(--bg-winner);
+  min-height: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.chip.plan-chip {
+  border-color: var(--accent-mid);
+  color: var(--accent-mid);
+  background: var(--bg-winner);
+}
+
+/* -- stepper (design handoff 2c: state, not decoration) -- */
+
+/* The strip grows rather than truncating. Four cells of live detail cannot fit
+   on one line at 150% on any screen, and the thing that got cut was the end of
+   a line — "delivers Sep 19 · 14:3…", a truncated stamp that reads as a wrong
+   stamp. It only ever grows when the selection changes, which is already the
+   moment the map re-fits. */
+.stepper {
+  display: flex;
+  min-height: 2.7rem;
+  border-bottom: 1px solid var(--border-primary);
+  background: var(--bg-header);
+  flex: none;
+}
+
+/* Cells size to what they hold, then share what is left: with `1 1 0` every
+   cell took a quarter of the bar, so COMMIT's two words sat in half an empty
+   cell while SOLVE's stamp was ellipsized to "14:3…" — a truncated time reads
+   as a wrong time. */
+.stage-cell {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  border-right: 1px solid var(--border-hairline);
+  min-width: 0;
+}
+.stage-cell:last-child {
+  border-right: none;
+}
+.stage-cell.active {
+  background: var(--bg-stage-active);
+}
+
+.stage-number {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  flex: none;
+}
+.stage-cell.done .stage-number {
+  color: var(--success);
+}
+.stage-cell.active .stage-number {
+  color: var(--accent);
+}
+.stage-cell.failed .stage-number {
+  color: var(--alert);
+}
+
+.stage-label {
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  flex: none;
+}
+.stage-cell.active .stage-label {
+  color: var(--accent-soft);
+}
+
+.stage-detail {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  min-width: 0;
+  /* Wraps instead of ellipsizing — see .stepper. break-word, not anywhere: a
+     facility id or a stamp moves to the next line whole. */
+  overflow-wrap: break-word;
+}
+
+/* -- the stage: fullscreen map + floating overlays -- */
+
+.stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: var(--bg-map);
+  overflow: hidden;
+}
+
+.map-root {
+  position: absolute;
+  inset: 0;
+  background-color: var(--bg-map);
+}
+
+.map-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* Map controls stack bottom-right above MapLibre's navigation control; the
+   toast owns the top centre. */
+.map-controls {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 7.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  z-index: 2;
+}
+.map-controls .chip {
+  background: rgba(20, 15, 10, 0.9);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  min-width: 2.8rem;
+  text-align: center;
+}
+.map-controls .chip.active-chip {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+/* With the decision panel open the bottom-right corner is covered: the
+   control stack (ours and MapLibre's) steps left of the panel. */
+.map-root.right-inset .map-controls {
+  right: calc(var(--panel-right) + var(--gutter) * 2);
+}
+.map-root.right-inset .maplibregl-ctrl-bottom-right {
+  right: calc(var(--panel-right) + var(--gutter));
+}
+/* The queue panel owns the bottom-left corner: the attribution steps right
+   of it instead of painting over its last rows. */
+.map-root.left-inset .maplibregl-ctrl-bottom-left {
+  left: calc(var(--panel-left) + var(--gutter));
+}
+/* The replay bar owns the bottom edge: every bottom control lifts above it. */
+.map-root.bottom-inset .maplibregl-ctrl-bottom-left,
+.map-root.bottom-inset .maplibregl-ctrl-bottom-right {
+  bottom: 4.9rem;
+}
+.map-root.bottom-inset .map-controls {
+  bottom: 12.4rem;
+}
+
+/* MapLibre chrome, restyled to the palette */
+.maplibregl-ctrl-group {
+  background: rgba(20, 15, 10, 0.9) !important;
+  border: 1px solid var(--border-primary);
+  border-radius: 0 !important;
+}
+.maplibregl-ctrl-group button {
+  border: none;
+  min-height: 1.9rem;
+}
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--border-hairline) !important;
+}
+.maplibregl-ctrl-icon {
+  filter: invert(0.85) sepia(0.2);
+}
+.maplibregl-ctrl-attrib {
+  background: rgba(20, 15, 10, 0.75) !important;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+}
+.maplibregl-ctrl-attrib a {
+  color: var(--text-muted) !important;
+}
+
+/* Map nodes. The marker element's box IS the node square, so MapLibre's
+   centre anchor puts the square exactly on the coordinate; the label hangs
+   below it out of flow. Utilization is the fill, decision state the border.
+   MapLibre owns their `position: absolute` + transform — never override
+   position on them (it throws every pin into document flow). */
+.map-node {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  min-height: 0;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.origin-diamond {
+  width: 0.6rem;
+  height: 0.6rem;
+  border: 2px solid var(--accent-mid);
+  background: rgba(15, 12, 8, 0.85);
+  transform: rotate(45deg);
+  display: block;
+}
+.map-node.origin-node.selected .origin-diamond {
+  background: var(--accent-mid);
+  box-shadow: 0 0 0.9rem rgba(255, 176, 0, 0.6);
+}
+
+/* Endpoint dots: where booked shipments start and where deliveries end. A
+   third of a hub's square and much dimmer — the businesses are context, the
+   nodes are the work. The selected shipment's own dots come forward. */
+.endpoint-dot {
+  display: block;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--text-faint);
+  box-shadow: 0 0 0 1px rgba(15, 12, 8, 0.9);
+}
+.map-node.customer-node .endpoint-dot {
+  background: var(--accent-soft);
+  opacity: 0.55;
+}
+.map-node.endpoint-node.selected .endpoint-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  opacity: 1;
+  background: var(--accent-mid);
+  box-shadow: 0 0 0.6rem rgba(255, 176, 0, 0.7);
+}
+
+.node-box {
+  display: block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid var(--text-muted);
+  background: var(--bg-map);
+}
+.map-node.util-some .node-box {
+  background: #4a3520;
+}
+.map-node.util-warm .node-box {
+  background: #7a4a14;
+  border-color: var(--accent-soft);
+}
+.map-node.util-hot .node-box {
+  background: #8a2e12;
+  border-color: var(--alert);
+}
+.map-node.candidate .node-box {
+  border-color: var(--accent-soft);
+  box-shadow: 0 0 0 2px rgba(255, 196, 107, 0.35);
+}
+.map-node.plan-dest .node-box {
+  border-color: var(--accent-mid);
+  box-shadow: 0 0 0 2px rgba(255, 176, 0, 0.4);
+}
+.map-node.rejected .node-box {
+  border-color: #6a3a2a;
+  background: #2a1810;
+}
+.map-node.origin .node-box {
+  border-color: var(--accent-mid);
+  background: var(--accent-mid);
+}
+.map-node.chosen .node-box {
+  background: var(--accent);
+  border-color: #ffd28a;
+  box-shadow: 0 0 1.1rem rgba(255, 122, 26, 0.6);
+}
+.map-node.closed .node-box {
+  border-style: dashed;
+  border-color: var(--alert);
+}
+/* A dwell on the SELECTED journey (§7.9): the goods pass through here. A
+   detached ring — quieter than the chosen hub's fill, and unmistakably not the
+   candidate glow. */
+.map-node.transit-stop .node-box {
+  box-shadow:
+    0 0 0 1px var(--bg-map),
+    0 0 0 3px var(--accent-soft);
+}
+/* Goods physically stranded here: the loudest node state on the map, and it
+   wins over every other one — a hub that is merely shut must not look the same
+   as a hub with cargo stuck inside it. */
+.map-node.trapped .node-box {
+  border-style: solid;
+  border-color: var(--alert);
+  background: var(--reject-fill);
+  box-shadow:
+    0 0 0 2px var(--alert),
+    0 0 1rem rgba(255, 107, 61, 0.6);
+}
+
+.node-label {
+  position: absolute;
+  top: calc(100% - 0.2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  line-height: 1.3;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  background: rgba(15, 12, 8, 0.8);
+  padding: 0.05rem 0.3rem;
+  pointer-events: none;
+}
+.map-node.chosen .node-label,
+.map-node.origin .node-label {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+.map-node.plan-dest .node-label {
+  color: var(--accent-mid);
+}
+.map-node.rejected .node-label {
+  color: var(--text-faint);
+}
+.map-node.closed .node-label {
+  color: var(--alert-light);
+}
+.map-node.trapped .node-label {
+  background: var(--alert);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+
+/* -- overlay panels -- */
+
+/* Stacking, bottom to top: MapLibre's own controls and the FIT/3D stack (2),
+   panels (3), the popover's catch layer (5), the toast (6), the popover (7).
+   A modal popover still wins where it overlaps a notice — but the notice sits
+   ABOVE the catch layer, because a dismiss control the layer swallows is a
+   control that does nothing when it is clicked. */
+.overlay {
+  position: absolute;
+  top: var(--gutter);
+  bottom: var(--gutter);
+  background: rgba(20, 15, 10, 0.95);
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  z-index: 3;
+}
+
+.overlay.left {
+  left: var(--gutter);
+  width: var(--panel-left);
+}
+
+.overlay.right {
+  right: var(--gutter);
+  width: var(--panel-right);
+}
+
+/* Centre panels sit between whatever side panels are open.
+
+   A centre panel spans the WHOLE strip between the side panels, so there is no
+   horizontal room to step the bottom-right control column out of its way — the
+   only thing to give it is vertical. The panel therefore stops above the strip
+   that column occupies (the FIT/3D stack at `bottom: 7.6rem` plus its own
+   height, with MapLibre's navigation underneath it), and above the toast with
+   it. A control behind a panel is a control that does nothing when it is
+   clicked, and the panel losing a few rem of height costs nothing by
+   comparison: at 150% on a 1080-tall screen it still gets ~756px.
+
+   The reservation is derived, not guessed. `top: gutter` + `max-height:
+   calc(100% - X)` puts the panel's bottom `X - gutter` above the stage floor,
+   and the control column's top is its `bottom` offset plus its own height
+   (two chips and their gap, 4.4rem). So X must exceed 7.6 + 4.4 + 0.75 =
+   12.75rem; 13.5rem leaves a rem of daylight. Add a third control to the stack
+   and this number has to grow with it — the smoke's map-control check is what
+   says so. */
+.overlay.center {
+  top: var(--gutter);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52rem;
+  max-width: calc(100% - var(--gutter) * 2);
+  bottom: auto;
+  max-height: calc(100% - 13.5rem);
+}
+.stage.queue-open .overlay.center {
+  left: calc(var(--panel-left) + var(--gutter) * 2);
+  transform: none;
+  max-width: calc(100% - var(--panel-left) - var(--gutter) * 3);
+}
+.stage.queue-open.decision-open .overlay.center {
+  max-width: calc(100% - var(--panel-left) - var(--panel-right) - var(--gutter) * 4);
+}
+/* The replay bar takes the bottom edge and everything above it steps up: the
+   control stack to 12.4rem, MapLibre's navigation to 4.9rem. Same arithmetic,
+   the taller column: 12.4 + 4.4 + 0.75 = 17.55rem, so 18.5rem. */
+.stage.replay-open .overlay.center {
+  max-height: calc(100% - 18.5rem);
+}
+
+/* An armed coordinate pick: the panel hides (still mounted — its form state
+   survives), the map takes a crosshair, and markers stop swallowing clicks. */
+.overlay.pick-hidden {
+  display: none;
+}
+.map-root.picking .map-canvas canvas {
+  cursor: crosshair;
+}
+.map-root.picking .map-node {
+  pointer-events: none;
+}
+.pick-hint {
+  position: absolute;
+  top: var(--gutter);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: rgba(20, 15, 10, 0.95);
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+}
+/* The replay bar owns the bottom edge: the side panels end above it. */
+.stage.replay-open .overlay.left,
+.stage.replay-open .overlay.right {
+  bottom: calc(4rem + var(--gutter) * 2);
+}
+
+.overlay.bottom-bar {
+  top: auto;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--gutter);
+  height: 4rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.9rem;
+}
+/* Fixed width, so the slider doesn't jump when LIVE turns into a stamp. */
+.replay-stamp {
+  min-width: 14rem;
+  text-align: right;
+}
+
+.panel-header {
+  padding: 0.6rem 0.75rem 0.45rem;
+  border-bottom: 1px solid var(--border-hairline);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex: none;
+}
+/* Header copy WRAPS rather than ellipsizing: a status line is only worth
+   having if it can be read to the end, and these lines grow with what the
+   world is doing (a closure names its disruption and when it lifts). The
+   header is `flex: none` on a column, so the extra line costs the body a few
+   rem and truncates nothing. */
+.panel-header > .micro {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+/* Direct children only: a second .micro in the header's own row is the
+   right-hand status, but one stacked inside .panel-title is a second LINE and
+   must stay left-aligned under the first. */
+.panel-header > .micro + .micro {
+  margin-left: auto;
+  flex: 0 1 auto;
+  text-align: right;
+}
+/* A real close control: big enough to find and hit, labelled. */
+.panel-header .close {
+  margin-left: auto;
+  flex: none;
+  min-height: 2.4rem;
+  padding: 0 0.9rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-soft);
+  border-color: var(--accent-soft);
+}
+.panel-header > .micro + .micro + .close {
+  margin-left: 0.6rem;
+}
+
+.panel-body {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.row {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-bottom: 1px solid var(--border-hairline);
+  padding: 0.6rem 0.75rem;
+  letter-spacing: 0;
+}
+.row.selected {
+  background: var(--bg-row-selected);
+  border-left: 3px solid var(--accent);
+  padding-left: calc(0.75rem - 3px);
+}
+
+.row-title {
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.row-sub {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+/* Key/value lines: FROM / TO / CARGO / DUE. A grid, so a value that wraps
+   stays aligned under itself instead of sliding under its key. */
+.row-line {
+  display: grid;
+  grid-template-columns: 3.8rem minmax(0, 1fr);
+  column-gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+  /* break-word, not anywhere: an id like SCL-R1 moves to the next line whole
+     instead of splitting mid-token whenever the line runs short. */
+  overflow-wrap: break-word;
+}
+.row-line.plain {
+  display: block;
+}
+.row-key {
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  padding-top: 0.1rem;
+}
+.row-val {
+  min-width: 0;
+}
+.row-needs {
+  grid-column: 2;
+  color: var(--accent-soft);
+}
+
+/* Decision panel title: id + state on one line, solver status under it. */
+.panel-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.panel-title .micro {
+  white-space: normal;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--border-primary);
+  color: var(--text-muted);
+  flex: none;
+}
+.badge.solved,
+.badge.allocated {
+  border-color: var(--success);
+  color: var(--success);
+}
+.badge.planned {
+  border-color: var(--accent-soft);
+  color: var(--accent-soft);
+}
+.badge.in_transit {
+  border-color: var(--accent-mid);
+  color: var(--accent-mid);
+}
+.badge.reject {
+  border-color: var(--alert);
+  color: var(--alert-light);
+}
+/* Trapped is not a status the network chose — it is an alarm. Filled, not
+   outlined, so it never reads as one more state in the ordinary palette. */
+.badge.trapped {
+  background: var(--alert);
+  border-color: var(--alert);
+  color: var(--on-accent);
+  font-weight: 700;
+}
+/* The status badge and any alarm beside it stay together at the row's edge. */
+.row-badges {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  flex: none;
+}
+.trapped-line {
+  color: var(--alert-light);
+}
+
+/* -- decision panel -- */
+
+/* Trapped cargo: the panel's alarm, above everything the decision says,
+   because none of it can be executed until an operator clears the goods. */
+.trapped-banner {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  background: var(--reject-fill);
+  border-bottom: 1px solid var(--alert);
+  border-left: 3px solid var(--alert);
+}
+.trapped-headline {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--alert-light);
+  overflow-wrap: break-word;
+}
+.trapped-note {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.route-block {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+/* Wide enough for the longest key here (DELIVER BY) to stay on one line. */
+.route-block .row-line {
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+}
+
+/* -- the delivery journey: one row per leg, in order, hold included -- */
+
+.itinerary {
+  border-bottom: 1px solid var(--border-hairline);
+}
+.leg {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+  column-gap: 0.3rem;
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+.leg:last-child {
+  border-bottom: none;
+}
+.leg-kind,
+.stop-kind {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+  padding-top: 0.1rem;
+}
+.leg-body {
+  min-width: 0;
+}
+.leg-main {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.leg-meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+/* Pass-through dwells: real bookings, but lighter than the legs that move the
+   goods — and tighter, so a journey with five of them still reads as a
+   sequence of movements with pauses in it rather than fifteen equal rows. */
+.leg.stop-leg {
+  padding-top: 0.22rem;
+  padding-bottom: 0.22rem;
+}
+.leg.stop-leg .leg-main {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+.leg.stop-leg .leg-meta {
+  color: var(--text-faint);
+}
+
+.leg.hold-leg {
+  background: var(--bg-winner);
+}
+.leg.hold-leg .leg-kind,
+.leg.deliver .leg-kind {
+  color: var(--accent-mid);
+}
+.leg.deliver .leg-main {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.leg.deliver.late .leg-kind,
+.leg.deliver.late .leg-meta {
+  color: var(--alert-light);
+}
+
+.winner {
+  background: var(--bg-winner);
+  border: 1px solid var(--border-primary);
+  margin: 0.6rem 0.75rem;
+  padding: 0.65rem;
+}
+
+.winner-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.score {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.stat .micro {
+  display: block;
+}
+.stat .mono {
+  font-size: 0.8rem;
+}
+
+.component-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  margin-top: 0.55rem;
+}
+.component-table th {
+  text-align: right;
+  color: var(--text-faint);
+  font-weight: 400;
+  padding: 0.15rem 0.4rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+.component-table th:first-child,
+.component-table td:first-child {
+  text-align: left;
+}
+.component-table td {
+  text-align: right;
+  padding: 0.15rem 0.4rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-hairline);
+}
+.component-table td.contribution {
+  color: var(--text-primary);
+}
+
+.alt-bar {
+  height: 0.25rem;
+  background: var(--accent-soft);
+  opacity: 0.55;
+  margin-top: 0.2rem;
+}
+.alt-title {
+  font-size: 0.78rem;
+}
+.reject-title {
+  font-size: 0.85rem;
+}
+
+.reject-line {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+.reject-code {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--alert-light);
+}
+.reject-data {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+  margin-top: 0.1rem;
+}
+
+.panel-footer {
+  border-top: 1px solid var(--border-primary);
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  flex: none;
+}
+.panel-footer button {
+  flex: 1 1 0;
+  min-height: 2.4rem;
+}
+
+/* -- the view switch, in the header between the wordmark and the status
+      cluster. Both it and .header-right take an auto left margin, so the free
+      space splits evenly and the switch sits centred between the two groups.
+      It is the only thing in the header allowed to shrink: padding and letter
+      spacing tighten with the viewport so six labels stay on ONE line. -- */
+
+.header-views {
+  margin-left: auto;
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tile-btn {
+  border: none;
+  border-right: 1px solid var(--border-hairline);
+  min-height: 2.4rem;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  padding: 0 clamp(0.35rem, 0.75vw, 0.9rem);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: clamp(0.02em, 0.2vw, 0.12em);
+  color: var(--text-muted);
+}
+.tile-btn:last-child {
+  border-right: none;
+}
+.tile-btn.active {
+  background: var(--bg-stage-active);
+  color: var(--accent);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+/* -- destructive-ish confirms -- */
+
+.danger {
+  border-color: var(--alert);
+  color: var(--alert-light);
+}
+.queue-actions,
+.shipment-actions {
+  flex: none;
+}
+.field-row label.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  cursor: pointer;
+}
+.field-row label.check input {
+  min-height: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* -- queue plan state + disruption board -- */
+
+.plan-actions {
+  flex: none;
+}
+.plan-actions .primary {
+  flex: 1 1 auto;
+}
+.plan-tag {
+  color: var(--accent-mid);
+}
+.plan-tag.unassigned {
+  color: var(--alert-light);
+}
+.disruption-board {
+  border-top: 1px solid var(--border-primary);
+  flex: none;
+  max-height: 40%;
+  overflow-y: auto;
+}
+.disruption-row {
+  padding: 0.45rem 0.75rem;
+}
+.disruption-row:hover,
+.row:hover {
+  background: var(--bg-row-selected);
+}
+.disruption-list {
+  border-bottom: 1px solid var(--border-primary);
+}
+
+/* -- popover with catch layer -- */
+
+.catch-layer {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 12, 8, 0.35);
+  border: none;
+  cursor: default;
+  z-index: 5;
+}
+
+.popover {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  z-index: 7;
+  transform: translateX(-50%);
+  width: 40rem;
+  max-width: calc(100% - 2.5rem);
+  max-height: calc(100% - 3.5rem);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.zone-block {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+/* What each booking on a zone IS: the customer's hold, or a staging dwell a
+   pass-through stop books while a truck is unloaded and reloaded (§7.9). */
+.reservations {
+  margin-top: 0.25rem;
+}
+.reservation {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  column-gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  overflow-wrap: break-word;
+}
+.reservation-role {
+  color: var(--text-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.reservation.staging .reservation-role {
+  color: var(--accent-soft);
+}
+
+/* -- occupancy timeline bars -- */
+
+.timeline {
+  display: flex;
+  gap: 2px;
+  align-items: stretch;
+  height: 2.75rem;
+  overflow: hidden; /* a bar can never paint outside its own chart */
+  padding: 0.25rem 0;
+  /* An axis under the bars: an empty zone reads as empty rather than as a
+     row of stray dashes. */
+  border-bottom: 1px solid var(--border-primary);
+}
+/* One column per day: the bar grows from the axis, the capacity rule sits
+   across it wherever the day's effective capacity falls. */
+.timeline .bar-slot {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  align-items: flex-end;
+}
+.timeline .bar {
+  width: 100%;
+  background: var(--accent-soft);
+  opacity: 0.7;
+  min-height: 2px;
+}
+.timeline .bar.over {
+  background: var(--alert);
+  opacity: 1;
+}
+/* The day's effective capacity. A bar standing above this rule is a zone over
+   its limit — on a cut or closed facility that gap IS the story, and colour
+   alone was carrying it. A dark core with a pale halo, because the rule has to
+   read against both the bright bar it crosses and the dark chart behind it:
+   pale-on-orange alone measured 1.3:1. */
+.timeline .cap-mark {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--bg-map);
+  box-shadow: 0 0 0 1px rgba(227, 217, 201, 0.55);
+}
+
+/* -- hit targets (design handoff: 44px minimum for real implementation; the
+      visuals stay mock-dense, the HIT AREAS are padded invisibly) -- */
+
+.panel-footer button,
+.field-row button,
+.toast button,
+.popover .panel-header button {
+  position: relative;
+}
+.panel-footer button::after,
+.field-row button::after,
+.toast button::after,
+.popover .panel-header button::after {
+  content: "";
+  position: absolute;
+  inset: -0.4rem;
+}
+/* The pseudo-element rides on MapLibre's positioning of the marker. */
+.map-node::after {
+  content: "";
+  position: absolute;
+  inset: -0.6rem;
+}
+/* Origin diamonds are small and often sit next to a hub: a modest hit area. */
+.map-node.origin-node::after {
+  inset: -0.3rem;
+}
+/* Endpoint dots are scenery: a hit area barely larger than the dot, so they
+   never reach across a hub or a diamond standing next to them. */
+.map-node.endpoint-node {
+  padding: 0.25rem;
+}
+.map-node.endpoint-node::after {
+  inset: -0.1rem;
+}
+
+/* -- login -- */
+
+.login-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-page);
+}
+.login-card {
+  width: 26rem;
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  background: var(--bg-panel);
+  padding: 1.25rem;
+}
+
+/* -- toast: centred over the map strip, never over a panel -- */
+
+.toast {
+  position: absolute;
+  bottom: 1rem;
+  left: 3rem;
+  right: 5rem; /* clear of the control column */
+  width: fit-content;
+  max-width: calc(100% - 8rem);
+  margin: 0 auto;
+  background: var(--bg-winner);
+  border: 1px solid var(--accent-mid);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 0.8rem;
+  z-index: 6;
+}
+/* A notice stays inside its strip: long server errors scroll rather than
+   climbing over the panels above, and unbreakable tokens wrap rather than
+   running off the screen. */
+.toast .mono {
+  max-height: 4.4rem;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.stage.queue-open .toast {
+  left: calc(var(--panel-left) + var(--gutter) * 2);
+}
+.stage.decision-open .toast {
+  right: calc(var(--panel-right) + var(--gutter) * 2 + 4rem);
+}
+.stage.replay-open .toast {
+  bottom: 6.25rem; /* above the bar and the lifted attribution */
+}
+.stage.queue-open .toast,
+.stage.decision-open .toast,
+.stage.replay-open .toast {
+  max-width: none;
+}
+.toast.error {
+  border-color: var(--alert);
+  color: var(--alert-light);
+}
+/* Square, so the invisible ::after pad below carries it past 44px: a dismiss
+   glyph is the smallest control in the app and must still be hittable. */
+.toast button {
+  border: none;
+  min-height: 2rem;
+  min-width: 2rem;
+  padding: 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+/* -- forms -- */
+
+.field-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  flex-wrap: wrap;
+}
+.field-row label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  min-width: 3.5rem;
+}
+/* A note under a row's fields: it takes a line of its own and starts under the
+   fields, not out at the panel edge (label width + the row's gap). */
+.field-hint {
+  flex: 1 0 100%;
+  margin-left: calc(3.5rem + 0.5rem);
+}
+.whatif-totals {
+  font-size: 0.78rem;
+  gap: 1.2rem;
+}
+
+/* Place-search hits: a compact list under the search row, name over address. */
+.place-results {
+  flex: 1 0 100%;
+  max-height: 11rem;
+  overflow-y: auto;
+  border: 1px solid var(--border-hairline);
+}
+.place-hit {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-bottom: 1px solid var(--border-hairline);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+}
+.place-hit:last-child {
+  border-bottom: none;
+}
+.place-hit:hover {
+  background: var(--bg-row-selected);
+}
+.place-hit .micro {
+  display: block;
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+pre.rendered {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  padding: 0.6rem 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+table.data th {
+  text-align: left;
+  padding: 0.3rem 0.5rem;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--border-primary);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+table.data td {
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+}
+
+/* A table keeps its columns: rather than squeeze a cell below what it needs —
+   which paints one column over the next — the table keeps its width and the
+   panel body scrolls sideways, with the bar along the bottom of the panel
+   where it can be seen. Only a panel too narrow for the table ever scrolls. */
+.panel-body.table-scroll {
+  overflow-x: auto;
+}
+.table-scroll table.data {
+  min-width: min-content;
+}
+
+/* A scheduled window: what it IS, then where it is. The role gets a column of
+   its own inside the cell so every row's place starts at the same x — dozens
+   of windows have to scan as a list, not as ragged prose. */
+.movement-where {
+  display: grid;
+  /* `auto`, never `minmax(0, …)`: the place column has to report what it needs
+     so the table can ask the panel for that width, instead of being squeezed
+     and painting over the column beside it. */
+  grid-template-columns: 5.6rem auto;
+  column-gap: 0.4rem;
+}
+.movement-role {
+  color: var(--text-faint);
+  white-space: nowrap;
+}
